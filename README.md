@@ -1,1 +1,1 @@
-aws-alb-lambda-s3-proxy
+# A Lambda-based proxy for AWS S3 via Application Load Balancer
