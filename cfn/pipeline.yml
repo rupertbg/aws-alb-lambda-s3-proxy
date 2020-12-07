@@ -116,11 +116,13 @@ Resources:
                 RoleArn: !GetAtt AutomationRole.Arn
                 StackName: s3-proxy-alb
                 TemplatePath: source::lambda.yml
-                ParameterOverrides: !Sub |
-                  {
-                    "VpcId": "${VpcId}",
-                    "Subnets": "${Subnets}"
-                  }
+                ParameterOverrides: !Sub 
+                  - |
+                      {
+                        "VpcId": "${VpcId}",
+                        "Subnets": "${Subnets}"
+                      }
+                  - Subnets: !Join [ ',', !Ref Subnets ]
             - Name: Bucket
               Namespace: bucket
               InputArtifacts:
