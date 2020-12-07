@@ -65,10 +65,6 @@ Resources:
         Rules:
           - Status: Enabled
             ExpirationInDays: 7
-      NotificationConfiguration:
-        LambdaConfigurations: 
-          - Event: s3:ObjectCreated:*
-            Function: !GetAtt Lambda.Arn
 
   LogsBucketPolicy:
     Type: AWS::S3::BucketPolicy
@@ -92,6 +88,9 @@ Outputs:
 
   HostedZoneId:
     Value: !GetAtt ApplicationLoadBalancer.CanonicalHostedZoneID
+
+  HTTPListener:
+    Value: !Ref HTTPListener
 
   LogsBucket:
     Value: !Ref LogsBucket

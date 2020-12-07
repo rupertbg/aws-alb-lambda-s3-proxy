@@ -1,12 +1,17 @@
 AWSTemplateFormatVersion: 2010-09-09
 Parameters:
+ 
   Listener:
     Type: String
     Description: The ARN of the Load Balancer Listener to use
 
-  ImageURI:
+  LambdaBucketName:
     Type: String
-    Description: URI of the Docker Image to run in Lambda
+    Description: The name of the S3 bucket that has the code
+
+  S3FunctionCodeVersion:
+    Type: String
+    Description: The S3ObjectVersion for the function code
 
 Resources:
   LambdaPermission:
@@ -41,17 +46,17 @@ Resources:
   Lambda:
     Type: AWS::Lambda::Function
     Properties:
-      Handler: index.lambda_handler
-      Runtime: python3.8
-      MemorySize: 128
-      ReservedConcurrentExecutions: 2
+      FunctionName: !Ref AWS::StackName
+      MemorySize: 256
       Timeout: 60
       Role: !GetAtt LambdaRole.Arn
       TracingConfig:
         Mode: Active
       PackageType: Image
       Code:
-        ImageUri: !Ref ImageURI
+        S3Bucket: !Ref LambdaBucketName
+        S3Key: code.zip
+        S3ObjectVersion: !Ref S3FunctionCodeVersion
 
   LambdaRole:
     Type: AWS::IAM::Role
@@ -79,9 +84,3 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*
-              - Effect: Allow
-                Action:
-                  - ssm:GetParameter
-                  - ssm:GetParameters
-                  - ssm:GetParametersByPath
-                Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${HostMappingParamPrefix}
