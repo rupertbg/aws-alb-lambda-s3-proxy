@@ -272,6 +272,9 @@ Resources:
                 Action: s3:*
                 Resource: '*'
               - Effect: Allow
+                Action: ec2:DescribeSubnets
+                Resource: '*'
+              - Effect: Allow
                 Action: iam:*
                 Resource:
                   - !Sub arn:aws:iam::${AWS::AccountId}:policy/s3-proxy*
