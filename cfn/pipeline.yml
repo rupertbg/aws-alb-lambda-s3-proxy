@@ -86,6 +86,9 @@ Resources:
                 ParameterOverrides: !Sub 
                   - |
                       {
+                        "GithubOwner": "${GithubOwner}",
+                        "GithubRepo": "${GithubRepo}",
+                        "GithubBranch": "${GithubBranch}",
                         "VpcId": "${VpcId}",
                         "Subnets": "${Subnets}"
                       }
@@ -122,13 +125,10 @@ Resources:
                 Capabilities: CAPABILITY_NAMED_IAM
                 RoleArn: !GetAtt AutomationRole.Arn
                 StackName: s3-proxy-alb
-                TemplatePath: source::cfn/lambda.yml
+                TemplatePath: source::cfn/alb.yml
                 ParameterOverrides: !Sub 
                   - |
                       {
-                        "GithubOwner": "${GithubOwner}",
-                        "GithubRepo": "${GithubRepo}",
-                        "GithubBranch": "${GithubBranch}",
                         "VpcId": "${VpcId}",
                         "Subnets": "${Subnets}"
                       }
