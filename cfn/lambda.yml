@@ -13,6 +13,9 @@ Parameters:
     Type: String
     Description: The S3ObjectVersion for the function code
 
+  ExampleProxyBucket:
+    Type: String
+
 Resources:
   LambdaPermission:
     Type: AWS::Lambda::Permission
@@ -85,3 +88,6 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*
+              - Effect: Allow
+                Action: s3:GetObject
+                Resource: !Sub arn:aws:s3:::${ExampleProxyBucket}/*

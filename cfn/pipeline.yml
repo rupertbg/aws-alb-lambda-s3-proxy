@@ -169,7 +169,8 @@ Resources:
                   {
                     "LambdaBucketName": "${LambdaS3Bucket}",
                     "S3FunctionCodeVersion": { "Fn::GetParam": [ "output", "output.json", "VersionId" ] },
-                    "Listener": "#{alb.HTTPListener}"
+                    "Listener": "#{alb.HTTPListener}",
+                    "ExampleProxyBucket": "#{bucket.Bucket}"
                   }
 
   GHWebHook:
