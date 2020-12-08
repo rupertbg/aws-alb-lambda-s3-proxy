@@ -182,7 +182,7 @@ Resources:
     DependsOn: AutomationRole
     Type: AWS::CodeBuild::Project
     Properties:
-      Name: !Sub s3-proxy-lambda-${AWS::StackId}
+      Name: s3-proxy-lambda
       ServiceRole: !GetAtt AutomationRole.Arn
       TimeoutInMinutes: 5
       Artifacts:
