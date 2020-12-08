@@ -274,7 +274,9 @@ Resources:
                 Action: ec2:*
                 Resource: '*'
               - Effect: Allow
-                Action: elasticloadbalancing:*
+                Action: 
+                  - elasticloadbalancing:*
+                  - elasticloadbalancingv2:*
                 Resource: '*'
               - Effect: Allow
                 Action: iam:*
