@@ -83,6 +83,13 @@ Resources:
                 RoleArn: !GetAtt AutomationRole.Arn
                 StackName: !Ref AWS::StackName
                 TemplatePath: source::cfn/pipeline.yml
+                ParameterOverrides: !Sub 
+                  - |
+                      {
+                        "VpcId": "${VpcId}",
+                        "Subnets": "${Subnets}"
+                      }
+                  - Subnets: !Join [ ',', !Ref Subnets ]
         - Name: Build
           Actions:
             - Name: Lambda
@@ -119,6 +126,9 @@ Resources:
                 ParameterOverrides: !Sub 
                   - |
                       {
+                        "GithubOwner": "${GithubOwner}",
+                        "GithubRepo": "${GithubRepo}",
+                        "GithubBranch": "${GithubBranch}",
                         "VpcId": "${VpcId}",
                         "Subnets": "${Subnets}"
                       }
