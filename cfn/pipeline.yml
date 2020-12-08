@@ -175,7 +175,7 @@ Resources:
       Authentication: GITHUB_HMAC
       TargetPipeline: !Ref Pipeline
       TargetAction: GitHub
-      Name: !Sub s3-proxy-lambda-${AWS::StackId}
+      Name: s3-proxy-lambda
       TargetPipelineVersion: !GetAtt Pipeline.Version
 
   Deploy:
