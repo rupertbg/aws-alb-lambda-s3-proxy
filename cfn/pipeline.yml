@@ -272,7 +272,9 @@ Resources:
                 Action: s3:*
                 Resource: '*'
               - Effect: Allow
-                Action: ec2:DescribeSubnets
+                Action: 
+                  - ec2:DescribeSubnets
+                  - ec2:DescribeVpcs
                 Resource: '*'
               - Effect: Allow
                 Action: iam:*
