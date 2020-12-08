@@ -50,6 +50,8 @@ Resources:
       MemorySize: 256
       Timeout: 60
       Role: !GetAtt LambdaRole.Arn
+      Runtime: python3.8
+      Handler: index.lambda_handler
       TracingConfig:
         Mode: Active
       Code:
