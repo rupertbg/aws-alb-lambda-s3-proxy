@@ -274,6 +274,9 @@ Resources:
                 Action: ec2:*
                 Resource: '*'
               - Effect: Allow
+                Action: elasticloadbalancing:*
+                Resource: '*'
+              - Effect: Allow
                 Action: iam:*
                 Resource:
                   - !Sub arn:aws:iam::${AWS::AccountId}:policy/s3-proxy*
