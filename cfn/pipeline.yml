@@ -82,7 +82,7 @@ Resources:
                 Capabilities: CAPABILITY_NAMED_IAM
                 RoleArn: !GetAtt AutomationRole.Arn
                 StackName: !Ref AWS::StackName
-                TemplatePath: source::pipeline.yml
+                TemplatePath: source::cfn/pipeline.yml
         - Name: Build
           Actions:
             - Name: Lambda
@@ -115,7 +115,7 @@ Resources:
                 Capabilities: CAPABILITY_NAMED_IAM
                 RoleArn: !GetAtt AutomationRole.Arn
                 StackName: s3-proxy-alb
-                TemplatePath: source::lambda.yml
+                TemplatePath: source::cfn/lambda.yml
                 ParameterOverrides: !Sub 
                   - |
                       {
@@ -138,7 +138,7 @@ Resources:
                 Capabilities: CAPABILITY_NAMED_IAM
                 RoleArn: !GetAtt AutomationRole.Arn
                 StackName: s3-proxy-bucket
-                TemplatePath: source::bucket.yml
+                TemplatePath: source::cfn/bucket.yml
             - Name: Lambda
               InputArtifacts:
                 - Name: source
@@ -154,7 +154,7 @@ Resources:
                 Capabilities: CAPABILITY_NAMED_IAM
                 RoleArn: !GetAtt AutomationRole.Arn
                 StackName: s3-proxy-lambda
-                TemplatePath: source::lambda.yml
+                TemplatePath: source::cfn/lambda.yml
                 ParameterOverrides: !Sub |
                   {
                     "LambdaBucketName": "${LambdaS3Bucket}",
