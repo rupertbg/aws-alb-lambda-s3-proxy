@@ -52,7 +52,6 @@ Resources:
       Role: !GetAtt LambdaRole.Arn
       TracingConfig:
         Mode: Active
-      PackageType: Image
       Code:
         S3Bucket: !Ref LambdaBucketName
         S3Key: code.zip
