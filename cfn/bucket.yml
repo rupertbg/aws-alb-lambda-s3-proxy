@@ -5,7 +5,7 @@ Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
 
-Ouputs:
+Outputs:
 
   Bucket:
     Value: !Ref S3Bucket
