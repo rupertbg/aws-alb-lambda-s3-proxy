@@ -61,6 +61,8 @@ Resources:
         S3Bucket: !Ref LambdaBucketName
         S3Key: code.zip
         S3ObjectVersion: !Ref S3FunctionCodeVersion
+      Environment:
+        CACHE_COUNT: 5
 
   LambdaRole:
     Type: AWS::IAM::Role
