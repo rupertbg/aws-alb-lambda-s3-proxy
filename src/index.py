@@ -25,7 +25,6 @@ def get_bucket_content(bucket, path):
     except botocore.exceptions.ClientError as e:
         print(e.response['Error']['Code'])
 
-@lru_cache
 def lambda_handler(event, context):
     if 'headers' not in event or 'host' not in event['headers']:
         return 'Invalid invocation'
