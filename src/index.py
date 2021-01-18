@@ -5,8 +5,10 @@ from os import environ
 from functools import lru_cache
 s3_client = boto3.client('s3')
 
+HOST_OVERRIDE = environ.get('HOST_OVERRIDE')
+BUCKET_OVERRIDE = environ.get('BUCKET_OVERRIDE')
 MAPPINGS_FILENAME = 'mappings.json'
-CACHE_COUNT = os.environ.get('CACHE_COUNT') or 0
+CACHE_COUNT = int(environ.get('CACHE_COUNT')) or 0
 
 @lru_cache(maxsize=CACHE_COUNT)
 def read_host_mappings():
@@ -41,7 +43,12 @@ def lambda_handler(event, context):
     if path == '/' or path == '':
         path = '/index.html'
 
-    host_mappings = read_host_mappings()
+    if HOST_OVERRIDE and BUCKET_OVERRIDE:
+        host_mappings = {
+            HOST_OVERRIDE: BUCKET_OVERRIDE,
+        }
+    else:
+        host_mappings = read_host_mappings()
 
     if host in host_mappings.keys():
         bucket_name = host_mappings[host]
