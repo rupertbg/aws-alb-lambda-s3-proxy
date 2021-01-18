@@ -45,7 +45,7 @@ Resources:
       SecurityGroups:
         - !Ref SecurityGroup
 
-  HTTPSListener:
+  HTTPListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       DefaultActions:
@@ -54,7 +54,7 @@ Resources:
             ContentType: application/json
             StatusCode: '503'
       LoadBalancerArn: !Ref ApplicationLoadBalancer
-      Port: 443
+      Port: 80
       Protocol: HTTP
 
   LogsBucket:
