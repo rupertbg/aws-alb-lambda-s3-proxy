@@ -171,7 +171,7 @@ Resources:
                     "S3FunctionCodeVersion": { "Fn::GetParam": [ "output", "output.json", "VersionId" ] },
                     "Listener": "#{alb.HTTPListener}",
                     "ProxyBucket": "#{bucket.Bucket}",
-                    "ProxyHost": "#{alb.DNSName}",
+                    "ProxyHost": "#{alb.DNSName}"
                   }
 
   GHWebHook:
