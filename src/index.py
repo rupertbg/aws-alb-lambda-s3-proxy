@@ -17,7 +17,6 @@ def read_host_mappings():
         mappings = json.load(mappings_file)
         return mappings
 
-
 @lru_cache(maxsize=CACHE_COUNT)
 def get_bucket_content(bucket, path):
     if path.startswith('/'):
@@ -26,10 +25,14 @@ def get_bucket_content(bucket, path):
         key = path
     print(f'Reading {key} from {bucket}')
     try:
-        return s3_client.get_object(
+        obj = s3_client.get_object(
             Bucket=bucket,
             Key=key,
         )
+        return {
+            'Body': obj['Body'].read().decode('utf-8'),
+            'ContentType': obj['ContentType']
+        }
     except botocore.exceptions.ClientError as e:
         print(e)
 
@@ -55,14 +58,13 @@ def lambda_handler(event, context):
         content = get_bucket_content(bucket_name, path)
         if content:
             print(f'Returning content {host} -> {bucket_name}{path}')
-            content_body = content['Body'].read().decode('utf-8')
             return {
                 'statusCode': 200,
                 'isBase64Encoded': 'ContentType' in content and 'image/' in content['ContentType'],
                 'headers': {
                     'Content-Type': content['ContentType'],
                 },
-                'body': content_body,
+                'body': content['Body'],
             }
         else:
             print(f'Content not found: {bucket_name}{path}')
