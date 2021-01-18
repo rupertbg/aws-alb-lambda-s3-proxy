@@ -13,8 +13,43 @@ Parameters:
     Type: String
     Description: The S3ObjectVersion for the function code
 
-  ExampleProxyBucket:
+  ProxyBucket:
     Type: String
+    Default: none
+
+  ProxyHost:
+    Type: String
+    Default: none
+
+  HostMappingBucketARNs:
+    Type: List<String>
+    Description: A list of S3 Object ARNs (e.g. 'arn:aws:s3:::my-example-bucket/*') for the proxy Lambda to access via IAM. Set 'none' if using ProxyBucket.
+    Default: none
+
+Conditions:
+
+  OverrideBucket:
+    !Not
+      - !Equals
+        - !Ref ProxyHost
+        - none
+  
+  OverrideHost:
+    !Not
+      - !Equals
+        - !Ref ProxyBucket
+        - none
+
+  OverrideHostMappings:
+    !And
+      - !Not
+        - !Equals
+          - !Ref ProxyHost
+          - none
+      - !Not
+        - !Equals
+          - !Ref ProxyBucket
+          - none
 
 Resources:
   LambdaPermission:
@@ -62,7 +97,18 @@ Resources:
         S3Key: code.zip
         S3ObjectVersion: !Ref S3FunctionCodeVersion
       Environment:
-        CACHE_COUNT: 5
+        Variables:
+          CACHE_COUNT: '5'
+          HOST_OVERRIDE:
+            !If
+              - OverrideHost
+              - !Ref ProxyHost
+              - !Ref AWS::NoValue
+          BUCKET_OVERRIDE:
+            !If
+              - OverrideBucket
+              - !Ref ProxyBucket
+              - !Ref AWS::NoValue
 
   LambdaRole:
     Type: AWS::IAM::Role
@@ -83,7 +129,7 @@ Resources:
                 Action:
                   - xray:PutTelemetryRecords
                   - xray:PutTraceSegments
-                Resource: "*"
+                Resource: '*'
               - Effect: Allow
                 Action:
                   - logs:CreateLogGroup
@@ -92,4 +138,8 @@ Resources:
                 Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*
               - Effect: Allow
                 Action: s3:GetObject
-                Resource: !Sub arn:aws:s3:::${ExampleProxyBucket}/*
+                Resource: 
+                  - !If
+                      - OverrideHostMappings
+                      - !Sub arn:aws:s3:::${ProxyBucket}/*
+                      - !Ref HostMappingBucketARNs
